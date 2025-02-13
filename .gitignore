@@ -1,0 +1,39 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+gradle.properties
+
+# Ignore Gradle build output directory
+build
+
+# Ignore IntelliJ project files
+.idea/
+
+# Ignore Eclipse project files
+.classpath
+.factorypath
+.project
+.settings
+bin
+
+# Annotation Processing
+.apt_generated/
+.apt_generated_test/
+
+nist-data/
+
+.terraform/
+
+*.p12
+
+terraform.tfstate.d/
+
+*.zip
+
+*.pem
+
+*.DS_Store
+node_modules/
+package-lock.json
+
+# Internal token
+*.key

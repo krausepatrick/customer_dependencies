@@ -1,0 +1,166 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id "io.spring.dependency-management" version "1.1.0"
+}
+
+group = "de.hochbahn.mosaic.customer"
+version = '1.0.16'
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/patrickkrause/customer_dependencies")
+        credentials {
+            username = findProperty("PACKAGES_USER") ?: System.getenv("PACKAGES_USER")
+            password = findProperty("PACKAGES_SECRET") ?: System.getenv("PACKAGES_SECRET")
+        }
+    }
+}
+
+def springBootVersion = "2.7.8"
+def springVersion = "5.3.20"
+def mapstructVersion = "1.5.1.Final"
+def lombokMapstructBindingVersion = "0.2.0"
+def lombokVersion = "1.18.24"
+def jupiterVersion = "5.9.0-M1"
+def protobufVersion = "3.21.7"
+def jjwtVersion = "0.11.5"
+def gcpStarterVersion = "3.4.4"
+
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/patrickkrause/customer_dependencies")
+            credentials {
+                username = findProperty("PACKAGES_USER") ?: System.getenv("PACKAGES_USER")
+                password = findProperty("PACKAGES_SECRET") ?: System.getenv("PACKAGES_SECRET")
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+        }
+    }
+}
+
+dependencyManagement {
+        dependencies {
+            // implementation
+            dependency("org.springframework.data:spring-data-commons:${springBootVersion}")
+            dependency("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
+                exclude group: "org.springframework.boot", name: "spring-boot-starter"
+                exclude group: "org.apache.logging.log4j", name: "log4j-api"
+                exclude group: "org.yaml:snakeyaml", name: "snakeyaml"
+                exclude group: "com.fasterxml.jackson.core", name: "jackson-databind"
+            }
+
+            dependency group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "2.14.0"
+
+            dependency group: "org.yaml", name: "snakeyaml", version: "1.33"
+
+            dependency("org.springframework.boot:spring-boot-starter:${springBootVersion}") {
+                exclude group: "org.springframework.boot", name: "spring-boot-starter-logging"
+                exclude group: "jakarta.annotation", name: "jakarta.annotation-api"
+            }
+
+            dependency("jakarta.annotation:jakarta.annotation-api:2.1.1")
+
+            dependency("org.springframework.boot:spring-boot-starter-logging:${springBootVersion}") {
+                exclude group: "org.apache.logging.log4j", name: "log4j-to-slf4j"
+            }
+
+            dependency("org.apache.logging.log4j:log4j-to-slf4j:2.18.0")
+            dependency("org.apache.logging.log4j:log4j-api:2.18.0")
+
+            dependency("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}") {
+                exclude group: "jakarta.annotation", name: "jakarta.annotation-api"
+            }
+            dependency "org.springframework.integration:spring-integration-core:5.5.12"
+            dependency("org.springframework:spring-aspects:${springVersion}")
+
+            //gcp
+            dependency("com.google.cloud:spring-cloud-gcp-starter-pubsub:${gcpStarterVersion}") {
+                exclude group: "jakarta.annotation", name: "jakarta.annotation-api"
+            }
+            dependency("com.google.cloud:spring-cloud-gcp-starter-data-datastore:${gcpStarterVersion}") {
+                exclude group: "com.google.http-client", name: "google-http-client-protobuf"
+                exclude group: "jakarta.annotation", name: "jakarta.annotation-api"
+            }
+
+            dependency("com.google.cloud:spring-cloud-gcp-starter-secretmanager:${gcpStarterVersion}") {
+                exclude group: "org.springframework.security", name: "spring-security-crypto"
+                exclude group: "jakarta.annotation", name: "jakarta.annotation-api"
+            }
+
+            dependency("com.google.cloud:spring-cloud-gcp-starter-logging:${gcpStarterVersion}") {
+                exclude group: "jakarta.annotation", name: "jakarta.annotation-api"
+            }
+
+            dependency("com.google.cloud:google-cloud-kms:2.5.2")
+            dependency("com.google.cloud:google-cloud-storage:2.8.0")
+            dependency("com.google.cloud:google-cloud-datastore:2.8.0")
+
+            dependency("com.google.crypto.tink:tink:1.6.1") {
+                exclude group: "com.google.http-client", name: "google-http-client-protobuf"
+            }
+            dependency "com.google.crypto.tink:tink-gcpkms:1.6.1"
+
+            //import gcp transient dependencies
+            dependency "com.google.apis:google-api-services-cloudscheduler:v1-rev20220503-1.32.1"
+            //Even after excluding, protobuf is not picking latest version
+            dependency("com.google.http-client:google-http-client-protobuf:1.42.2") {
+                exclude group: "com.google.protobuf", name: "protobuf-java"
+            }
+            dependency "com.google.protobuf:protobuf-java:${protobufVersion}"
+            dependency "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+
+            dependency "com.google.guava:guava:31.1-jre"
+
+            dependency "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+
+            dependency "io.micrometer:micrometer-core:1.9.0"
+
+            dependency "javax.validation:validation-api:2.0.1.Final"
+            dependency "org.hibernate:hibernate-validator:7.0.4.Final"
+
+            dependency "org.mapstruct:mapstruct:${mapstructVersion}"
+
+            // testImplementation
+            dependency "io.rest-assured:spring-mock-mvc:5.1.1"
+            dependency "org.awaitility:awaitility:4.2.0"
+            dependency "com.google.cloud:google-cloud-pubsub:1.119.1"
+            dependency "com.google.cloud:google-cloud-storage:2.0.1"
+            dependency "com.jayway.jsonpath:json-path:2.7.0"
+
+            dependency "org.junit.jupiter:junit-jupiter-api:${jupiterVersion}"
+            dependency "org.skyscreamer:jsonassert:1.5.0"
+
+            dependency "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+
+            // runtimeOnly
+            dependency "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+            dependency "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+
+            // compilyOnly
+            dependency "org.projectlombok:lombok:${lombokVersion}"
+
+            // testCompileOnly
+            dependency "org.projectlombok:lombok:${lombokVersion}"
+
+            // annotationProcessor
+            dependency "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+            dependency "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+
+            // testAnnotationProcessor
+            dependency "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+            dependency "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+        }
+}
