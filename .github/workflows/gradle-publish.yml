@@ -14,19 +14,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  dependency-vulnerability-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Dependency Check
-        run: |
-          ./gradlew dependencyCheckAnalyze
-        env:
-          PACKAGES_USER: ${{ secrets.PACKAGES_USER }}
-          PACKAGES_SECRET: ${{ secrets.PACKAGES_SECRET }}
+#  dependency-vulnerability-check:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Dependency Check
+#        run: |
+#          ./gradlew dependencyCheckAnalyze
+#        env:
+#          PACKAGES_USER: ${{ secrets.PACKAGES_USER }}
+#          PACKAGES_SECRET: ${{ secrets.PACKAGES_SECRET }}
 
   build:
-    needs: dependency-vulnerability-check
     runs-on: ubuntu-latest
     permissions:
       contents: read

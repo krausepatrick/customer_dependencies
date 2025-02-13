@@ -12,7 +12,7 @@ repositories {
 
     maven {
         name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/patrickkrause/customer_dependencies")
+        url = uri("https://maven.pkg.github.com/krausepatrick/customer_dependencies")
         credentials {
             username = findProperty("PACKAGES_USER") ?: System.getenv("PACKAGES_USER")
             password = findProperty("PACKAGES_SECRET") ?: System.getenv("PACKAGES_SECRET")
@@ -35,7 +35,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/patrickkrause/customer_dependencies")
+            url = uri("https://maven.pkg.github.com/krausepatrick/customer_dependencies")
             credentials {
                 username = findProperty("PACKAGES_USER") ?: System.getenv("PACKAGES_USER")
                 password = findProperty("PACKAGES_SECRET") ?: System.getenv("PACKAGES_SECRET")

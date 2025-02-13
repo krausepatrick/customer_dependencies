@@ -1,2 +1,2 @@
-# penguin_central
-repository for penguin artifacts 
+# customer_dependencies
+repository for customer artifacts 
